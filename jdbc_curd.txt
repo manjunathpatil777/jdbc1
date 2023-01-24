@@ -1,0 +1,99 @@
+package ewit1;
+
+	import java.sql.Connection;
+	import java.sql.DriverManager;
+	import java.sql.PreparedStatement;
+	import java.sql.ResultSet;
+	import java.sql.SQLException;
+	import java.util.Scanner;
+
+	public class EWIT_CRUD {
+		public static void main(String[] args) throws Exception {
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/ewit", "root", "root");
+			boolean flag = true;
+			while (flag) {
+				System.out.println("1.add student");
+				System.out.println("2.fetch the student by usn");
+				System.out.println("3.fetch all the student");
+				System.out.println("4.update the student number by taking usn ");
+				System.out.println("5.remove the student");
+				System.out.println("6.exit");
+				Scanner scanner = new Scanner(System.in);
+				switch (scanner.nextInt()) {
+				case 1: {
+					PreparedStatement preparedStatement = connection
+							.prepareStatement("insert into student_details values(?,?,?,?)");
+					System.out.println("enter the usn");
+					preparedStatement.setString(1, scanner.next());
+					System.out.println("enter the name");
+					preparedStatement.setString(2, scanner.next());
+					System.out.println("enter the branch");
+					preparedStatement.setString(3, scanner.next());
+					System.out.println("enter the number");
+					preparedStatement.setLong(4, scanner.nextLong());
+					preparedStatement.executeUpdate();
+					System.out.println("hooooo");
+
+				}
+					break;
+				case 2: {
+					PreparedStatement preparedStatement = connection
+							.prepareStatement("select * from student_details where usn=?");
+					System.out.println("enter the usn");
+					preparedStatement.setString(1, scanner.next());
+					ResultSet e = preparedStatement.executeQuery();
+					e.next();
+			System.out.println("usn : " + e.getString(1) + " name : " + e.getString(2) + " branch : "
+							+ e.getString(3) + " number : " + e.getLong(4));
+					System.out.println("hooooo");
+
+				}
+					break;
+				case 3: {
+					PreparedStatement preparedStatement = connection.prepareStatement("select * from student_details");
+					ResultSet e = preparedStatement.executeQuery();
+					while (e.next())
+
+						System.out.println("usn : " + e.getString(1) + " name : " + e.getString(2) + " branch : "
+								+ e.getString(3) + " number : " + e.getLong(4));
+					System.out.println("hooooo");
+
+				}
+					break;
+				case 4: {
+					PreparedStatement preparedStatement = connection
+							.prepareStatement("update student_details set number=? where usn=?");
+					System.out.println("enter the usn");
+					preparedStatement.setString(2, scanner.next());
+
+					System.out.println("enter the new number");
+					preparedStatement.setLong(1, scanner.nextLong());
+
+					preparedStatement.executeUpdate();
+					System.out.println("hooooo");
+
+				}
+					break;
+				case 5: {
+					PreparedStatement preparedStatement = connection
+							.prepareStatement("delete from student_details where usn=?");
+					System.out.println("enter the usn");
+					preparedStatement.setString(1, scanner.next());
+					preparedStatement.executeUpdate();
+					System.out.println("succesfully updated ");
+				}
+					break;
+				case 6: {
+					flag = false;
+					System.out.println("thank you");
+				}break;
+				default:
+					System.out.println("invalid option");
+				}
+				
+			}
+			connection.close();
+		}
+
+	}
+
